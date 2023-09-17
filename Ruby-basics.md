@@ -1,6 +1,8 @@
 <a name="readme-top"></a>
 
-# Learn to Code with Ruby
+<h1 align="center"> Learn to Code with Ruby </h1>
+
+<img src="https://sumatosoft.com/wp-content/uploads/2023/03/ruby-lang-ar21.png" />
 
 - [Numbers](#section-1--numbers)
 - [Strings](#section-2--strings)
@@ -16,7 +18,6 @@
 - [Classes](#section-12-classes)
 - [Module](#section-13-module)
 - [Classes ||](#section-14-classes)
-
 
 
 # section 1 : Numbers
