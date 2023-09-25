@@ -65,6 +65,8 @@ undefined
        array 
     function**
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## javascript :  is dynamic programming language (ex)
 
 ```jsx
@@ -73,6 +75,8 @@ if(true){
 	check = true ; // note : check variable above was string but here it's changed into true  
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Object
 
@@ -91,10 +95,14 @@ dot notation : console. log(objName.key);
 
 bracket notation : console.log(objName[’key’]);
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Array
 
 - array can store multiple data type let arr = [”ahmed”, “mohamed”,3];
 - arrays the original of it, is object console.log(typeof(arr));
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Functions
 
@@ -108,12 +116,16 @@ function fun_Name(parameters){
 fun_Name(argument); //calling function
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # section 2 : Operator
 
 ## equality operator
 
 - strict equality “===” : (type + value) the two values must be the same in the type an value
 - lose equality “==” : the value must be equal in value only doesn’t matter the type ,,,, means “1” equal 1
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## ternary operator ?true:false
 
@@ -122,6 +134,10 @@ let point = 90 ;
 let type = point > 100 ? 'gold' : 'sliver' ;
 console.log(type);
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # section 3 : Control flow
 
@@ -147,6 +163,8 @@ if (hour >= 6 && hour <= 12) {
     console.log("good evening");
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## switch… case
 
@@ -179,6 +197,7 @@ switch (hour) {
 }
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## for
@@ -195,6 +214,8 @@ for(let i =0 ; i<5;i++){
 		console.log(hello world);
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## while
 
@@ -213,6 +234,8 @@ i++
 }
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## do-while
 
 it execute your code then check your condition ,,, it’s guarantee execute your code at least once 
@@ -228,6 +251,8 @@ do {
 }while(false)
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## for-in
 
 it iterate over your object keys ,,, don’t have to use tradition defination of for(intial express; cond; ++)
@@ -241,6 +266,8 @@ for(let key in arr){
 	console.log(key,arr[key]); // in this example the key will be indeces of your array
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## for-of
 
@@ -256,6 +283,8 @@ for(let value of arr){
 	console.log(value)
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## exercise : Landscape portrait
 
@@ -460,6 +489,8 @@ function showPrimes(limit) {
 showPrimes(2);
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # section 4 : Objects
 
 > **Object** : it’s used to hold multiple property with different data types related to one big variable
@@ -486,6 +517,8 @@ console.log(circle.radius)
 
 </aside>
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## factory function
 
 **factory function :** is used to define multiple object 
@@ -507,6 +540,8 @@ let circle1 = factoryFunction(2, "green");
 circle1.draw();
 circle2.draw();
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## constructor function
 
@@ -531,6 +566,8 @@ new key word do three things :
 1. create new empty object 
 2. assign this.property to the new object 
 3. return the object with it’s property 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Primitive and reference
 
@@ -592,6 +629,8 @@ let person= {
 
 let perons2 = Object.assign({},person); // {} is intial object that added person to it
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## exercise : address object
 
@@ -666,6 +705,8 @@ console.log(areEqual(address1, address2));
 console.log(areSame(address1, address3));
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # section 5 : array
 
 ## adding in array
@@ -683,6 +724,8 @@ arr.unshift(1); //adding at the front
 arr.splice(1,0,5,6,7); //adding at the middle ,,, splice(index elemetnt to start with , Nof element in you want to delete , elements you want to add)
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## removing in array
 
 we have three ways  with three different position for deleting from array : 
@@ -697,6 +740,8 @@ arr.pop(4); //removing at the end
 arr.shift(1); //removing at the front
 arr.splice(1,2); //adding at the middle ,,, splice(index elemetnt to start with , Nof element in you want to delete , elements you want to add)
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## find in array
 
@@ -723,11 +768,15 @@ console.log(persons.findIndex((element) => {
 }))
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## emptying array
 
 - arr = [] we use this way if your array doesn’t refered by other variables
 - arr.length=0
 - arr.splice(0,arr.length);
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## combining  array
 
@@ -753,6 +802,8 @@ let arr2= arr1.slice()
 
 </aside>
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## spread operator
 
 - take a copy or merge arrays to new array
@@ -763,12 +814,16 @@ let arr2=[4,5,6];
 let result = [...arr1,"a","b","c", ...arr2]
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## iteration
 
 ```jsx
 let arr = ["first","second","third"] ; 
 arr.forEach((element)=>{console.log(`this is ${element}`)}) ; // this iteration don't change the orginal value of array
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## joining array
 
@@ -777,12 +832,16 @@ we have two methods :
 - join() : convert array to string            [1,2,3].join(”/”) ⇒ “1/2/3”
 - split(): convert string to array            “hello it’s me”.split(” “) ⇒ [”hello”, ”it’s” , “me” ]
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## sorting array
 
 we have two methods : 
 
 - sort() : sort array from assending                  [1,7,2,5,3].sort() ⇒ [1,2,3,5,7]
 - reverse() : reverse the array elements            [1,2,3,5,7].reverse() ⇒ [7,5,3,2,1]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## testing array
 
@@ -807,6 +866,8 @@ return filtered array based on condition
 let arr = [-1,4,2,3];
 let onlyPositive = arr.filter(element => element>0)
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## exercise : array range
 
@@ -852,6 +913,8 @@ const output = except(numbers, [1]);
 console.log(output);
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # section 6 : functions
 
 ## arguments & parameters
@@ -890,6 +953,8 @@ function person(name,age = 22 , address){
 person("ahmed",undefined, "egypt");
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## getter and setter
 
 > getter and setter : if we want to create a function that return object data and access it as property with dot notation
@@ -913,6 +978,8 @@ person.fullName = "mohamed hassan"
 console.log(person.fullName);
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## errors and exception
 
 <aside>
@@ -935,6 +1002,8 @@ try {
     console.log(error);
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## let vs var
 
@@ -966,6 +1035,8 @@ function test2(){
 so if window object use third party that have the same var variable name it will be overwritten
 
 </aside>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## This keyword
 
@@ -1002,6 +1073,8 @@ function test(){
 	console.log(this); //this refer to window object
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### changing this
 
@@ -1042,6 +1115,8 @@ let obj = {
 }
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## exercise : sum of arguments
 
 ```jsx
@@ -1081,3 +1156,5 @@ let circle = {
 circle.radiusSet = 10;
 console.log(circle.area);
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
