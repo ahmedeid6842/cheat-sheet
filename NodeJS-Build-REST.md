@@ -3,6 +3,17 @@
 <h1 align="center"> NodeJS the Guide to Build A RESTful APIs  </h1>
 <img src="https://wallpaperbat.com/img/818879-node-js-wallpaper-top-free-node-js-background.png" />
 
+### 📑 Table of Contents
+- [Node Module System](#section-1--node-module-system)
+- [Building REST APIs](#section-2--building-rest-apis)
+- [Express Advanced Topics](#section-3--express-advanced-topics)
+- [Asynchronous Javacript](#section-4--asynchronous-javacript)
+- [CRUD operation using Mongodb](#section-5--crud-operation-using-mongodb)
+- [Mongoose Data validation](#section-6--mongoose-data-validation)
+- [Modeling Relationship](#section-7--modeling-relationship)
+- [Authentication and Authorization](#section-8--authentication-and-authorization)
+- [Handling Logging Errors](#section-9--handling-logging-errors)
+
 # section 1 : Node Module System
 
 #### 🔥 In Node.js every file considered as module, so functions and variables assigned to that module and can’t be accessed otherwise you allow that
@@ -105,6 +116,8 @@ const server = http.createServer((req,res)=>{
 server.listen(3000);
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # section 2 : Building REST APIs
 
 >   🔥 REST : REpresentation State Transfer
@@ -201,6 +214,7 @@ app.put("/api/courses/:id", (req, res) => {
 
 > ##### 🔥 when you send response `res.send()` use `return` keyword to stop the rest execution function
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # section 3 : Express advanced topics
 
@@ -267,6 +281,8 @@ app.get("env"); // return NODE_ENV
     ```
 
     > #### 🔥 if you want to set secret env_var but not write it in json object source code config package provide custom_environment_variables.json to set those type of env
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # section 4 : Asynchronous Javacript
 
@@ -454,6 +470,8 @@ const p2 = new Promise((resolve, reject) => {
 Promise.race([p1, p2])
     .then(result => { console.log(result) }); // print the result after 2 second  
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # section 5 : CRUD operation using Mongodb
 
@@ -716,6 +734,8 @@ async function exercise() {
 exercise();
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # Section 6 : Mongoose Data validation
 
 > #### We can make field required based on the existence of another field
@@ -784,6 +804,8 @@ const schema = new mongoose.Schema({
 	}
 })
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Section 7 : Modeling Relationship
 
@@ -882,6 +904,8 @@ async function doSomeThing(){
 		.update("collectionName",{_id:movie.id},{$inc:{numberInStock : -1}}); // those two processes "save and update" both of them will execute and if one fail the anoterh is fail too 
 }
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Section 8 : Authentication and Authorization
 
@@ -1040,6 +1064,8 @@ createjwt({name : "ahmed"});
 const decoded = jwt.verify(createjwt({name : "ahmed"}),"jwtsecret"); // return {name : "ahmed"}
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # Section 9 : Handling Logging Errors
 
 ## try-catch
@@ -1162,3 +1188,5 @@ throw new Error("error ocurred during the run");
 ```
 
 > #### 🔥 it’s a better implementation if you hit uncaught Exception or un handled rejection to terminate you project
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
