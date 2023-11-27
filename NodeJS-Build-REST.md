@@ -877,8 +877,165 @@ async function updateEmbed(){
 const Fawn = require("fawn");
 Fawn.init(mongoose)
 async function doSomeThing(){
- new Fawn.task()
-					.save("collectionName",object to store)
-					.update("collectionName",{_id:movie.id},{$inc:{numberInStock : -1}}); // those two processes "save and update" both of them will execute and if one fail the anoterh is fail too 
+    new Fawn.task()
+		.save("collectionName",object to store)
+		.update("collectionName",{_id:movie.id},{$inc:{numberInStock : -1}}); // those two processes "save and update" both of them will execute and if one fail the anoterh is fail too 
 }
+```
+
+# Section 8 : Authentication and Authorization
+
+## Register Method
+
+#### register route have four main stages :
+  1. validate request body 
+  2. check email is unique 
+  3. hash password
+  4. save your new user
+
+```jsx
+route.post("/", async (req, res) => {
+		//1. validate request body
+    const { error } = validateUser(req.body);
+    if (error) return res.status(400).send(error.message);
+
+		//2. check if email is unique 
+    let user = await User.findOne({ email: req.body.email });
+    if (user) return res.status(400).send("email already exsist");
+    
+    user = new User(req.body);
+
+		//3. hash password 
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+    
+		//4. save our user 
+    await user.save();
+
+    return res.send(_.pick(user, ["name", "email"]));
+})
+```
+
+## Login Method
+
+#### login route have four main stages :
+  1. validate request body 
+  2. check email is exist or not 
+  3. compare entered password with hashed password
+  4. return JSON WEB TOKEN
+
+```jsx
+route.post("/", async (req, res) => {
+		//1. validate request body
+    const { error } = validateUser(req.body);
+    if (error) return res.status(400).send(error.message);
+
+		//2. check email is exist or not 
+    let user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(404).send("email not found or incorrect password");
+
+		//3. compare entered password with hashed password
+    const verified = await bcrypt.compare(req.body.password, user.password);
+    if (!verified) return res.status(404).send("email not found or incorrect password");
+
+		//4. return JSON WEB TOKEN
+    return res.send(jwt.sign({ _id: user._id }, "secret"));
+})
+```
+
+## Is Authenticated middleware
+
+#### isAuth middleware is to check if the user is authenticated or not .
+#### this method has four main steps : 
+  1. check if token provided 
+  2. verify the token , if not valid return 400 status “bad request”
+  3. assign `req.user = decoded` to use payload in the next stages
+  4. pass the control to the next middleware in request process pipeline
+
+```jsx
+const jwt = require("jsonwebtoken");
+module.exports = function (req, res, next) {
+		// 1. check if token provided 
+    const token = req.header("x-auth-token");
+    if (!token) return res.status(401).send("no token provided");
+
+    try {
+				// 2. verify the token , if not valid return 400 status “bad request”
+        let decode = jwt.verify(token, "secret");
+        if (!decode) return res.status(400).send("invalid token provided");
+				
+				// 3. assign req.user = decoded to use payload in the next stages
+        req.user = decode;
+
+				// 4. pass the control to the next middleware in request process pipeline
+        next();
+    } catch (err) {
+        return res.send(err.message);
+    }
+}
+```
+
+## Is Authorized  middleware
+
+#### isAuthorized middleware is to check if the user is authorized or not .
+#### method steps : 
+  1. check if an `req.user` payload  is Admin is set to true or not, if not return 403 status “un authorized”
+  2. pass the control to the next middleware
+> 
+
+```jsx
+module.exports = function (req, res, next) {
+    if (!req.user.isAdmin) return res.status(403).send("un authorized");
+    next();
+}
+```
+
+## Bcrypt
+
+#### 🔥 bcrypt : is npm package that hash and verify password
+
+> 👀 salt is very important cause it prevent reversed testing 
+`genSalt(numberOfRounds)` : this bcrypt method create salt based on number of rounds , the more number of round increase the more it become complex hash but the more it consuming time .
+`hash(plaintext,salt)` : this function takes our plain text and salt arguments and return hashed password
+> 
+
+```jsx
+const bcrypt = require("bcrypt");
+
+async function createPassword(password){
+	const salt = await bcrypt.genSalt(10);
+	const hashedpassword = await bcrypt.hash(password,salt);
+	console.log(hashedpassword);
+}
+
+createPassword();
+```
+
+> 👀 `compare(plaintext,hashedPassword)` : a bcrypt method that takes plaintext and hashed password , return true of false based on the correctness of password
+> 
+
+## JSON Web token
+
+
+🔥 what is JWT ?? [https://jwt.io/introduction](https://jwt.io/introduction)
+
+> #### 👀 jsonwebtoken : is npm package to create json web token and verify it although
+> 
+
+> `sign(data,secret)` : jwt method that create json web token
+> 
+
+> `verify(token,secret)` : jwt method that verify if the token is correct based on secret , if true it’s return the payload of token
+> 
+
+```jsx
+const jwt = require("jsonwebtoken");
+
+async function createjwt(data){
+	const jwt = jwt.sign(data,"jwtsecret"); //create jwt that contains "data" in payload with secret = "jwtsecret"
+	console.log(jwt);
+}
+
+createjwt({name : "ahmed"});
+const decoded = jwt.verify(createjwt({name : "ahmed"}),"jwtsecret"); // return {name : "ahmed"}
 ```
