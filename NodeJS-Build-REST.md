@@ -200,3 +200,70 @@ app.put("/api/courses/:id", (req, res) => {
 ```
 
 > ##### 🔥 when you send response `res.send()` use `return` keyword to stop the rest execution function
+
+
+# section 3 : Express advanced topics
+
+## Middleware
+
+> #### 👀  middleware is function that take request object and either return response to the client or passes control to another middleware function in request processing pipeline
+> 
+
+![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/7f8db80e-e94a-4e99-8d7f-d78255b71e3e)
+
+```jsx
+app.use(function (req,res,next){
+		next(); // next passes the control to next middleware function 
+})
+```
+
+> `express.static()` : is middleware that serve static page 
+`express.urlencoded()` : is middleware that convert form template to object 
+`morgan(”tiny”)` : middleware that log requests in console
+> 
+
+```jsx
+const express = require("express");
+const morgan = require("morgan");
+const app = express();
+app.use(express.static());
+app.use(express.urlencoded({extended : true})); // {extended : true} help to use more complex data type like arrays
+app.use(morgan("tiny")); // "tiny" is way to print small log ,,, you can also store logs in file
+```
+
+
+## Environments
+
+>  environment variables : are variable that set on running
+> 
+
+> `app.get(”env”)` : return the current environment working on it like development or production .
+> 
+
+```jsx
+app.get("env"); // return NODE_ENV
+```
+
+## configuration
+
+
+> #### 🔥 config : is package that help us to set environment variable for configuration
+
+### steps to create you configs
+
+1. create config directory and put your json file configs based on NODE_ENV
+
+    ![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/59c8983e-ed55-435b-88b5-b29170e0f144)
+
+2. type a json object to set props 
+
+    ![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/c0f28c35-03c5-4d87-b244-a538bee20c9b)
+
+3. access the env you assigned 
+
+    ```jsx
+    const config = require("config");
+    console.log(config.get("name"));
+    ```
+
+    > #### 🔥 if you want to set secret env_var but not write it in json object source code config package provide custom_environment_variables.json to set those type of env
