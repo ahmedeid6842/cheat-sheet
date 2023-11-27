@@ -267,3 +267,190 @@ app.get("env"); // return NODE_ENV
     ```
 
     > #### 🔥 if you want to set secret env_var but not write it in json object source code config package provide custom_environment_variables.json to set those type of env
+
+# section 4 : Asynchronous Javacript
+
+## Asynchronous VS synchronous
+
+> #### 🔥 synchronous is executing the code line by line in blocking way blocking means block the thread until the current process is executed
+
+
+> #### 🔥 Asynchronous is non-blocking executing means release the thread to execute another process and the back
+
+
+![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/f03f0355-93a7-4f92-ae2e-e93a92e6947c)
+
+> in code below js engine will execute print before and release thread in setTimeout execute the another print then after two second will execute settime out
+> 
+
+```jsx
+console.log("before");
+setTimeout(()=>{
+	console.log("reading a user from db");
+},2000)
+console.log("after");
+```
+
+## callback
+
+> #### 🔥 callback means after executing this Async code do something
+
+```jsx
+const user = getUser(id);
+console.log(user) // will print undefined 
+
+function getUser(id){
+	setTimeout(()=>{
+		console.log("reading a user from db");
+		return {id, name:"ahmed eid"};
+	},2000)
+}
+```
+
+> ⬆️ In code above even `getUser`  have Async function but it’s executed as Sync function so it return undefined because in execution time it doesn’t return anything 
+> 
+
+
+##### To solve the problem above of sync function have Async function we use callback
+
+```jsx
+getUser(1,(user)=>{
+	console.log(user);
+})
+
+function getUser(id,callback){
+	setTimeout(()=>{
+		console.log("reading a user from db");
+		callback({id,name:"ahmed eid"});
+	},2000)
+}
+```
+
+> ##### 🔥 callback cause a problem named callback hell which mean a callback executed inside another callback and so on
+
+```jsx
+getUser(1,(user)=>{
+	getaddress(user,(address)=>{
+			console.log(user,address);
+	})
+})
+
+function getUser(id,callback){
+	setTimeout(()=>{
+		console.log("reading a user from db");
+		callback({id,name:"ahmed eid"});
+	},2000)
+}
+
+function getaddress(user,callback){
+	setTimeout(()=>{
+		callback(["egypt","ismailia"]);
+	})
+}
+```
+
+## Promises
+
+##### 🔥 promises hold the event result of Async operation
+
+> ##### promises have 3 status : pending - fulfilled - rejected 
+1. pending means the promises is processing 
+2. fulfilled means async operation execution is done and return result 
+3. rejected means Async operation rejected and return error
+> 
+
+![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/34700e78-b4c6-4371-9972-a0c19fbde2d8)
+
+```jsx
+const p = new Promise((resolve,reject)=>{
+	// code that executed async
+	resolve(result);
+	reject(new Error("error message"));
+})
+```
+
+```jsx
+const p = new Promise ((resolve,reject)=>{
+	setTimeout(()=>{
+		resolve({name:"ahmed eid"}) // after this async code is executed it will return object
+	},2000)
+})
+
+p.then((result)=>console.log(result)); //consuming the promise 
+```
+
+### Examples
+
+```jsx
+getUser(1)
+    .then((user) => getAdresses(user))
+    .then((address) => console.log(address));
+
+function getUser(id) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({ id: id, name: "ahmed eid" });
+        }, 2000);
+    })
+}
+
+function getAdresses(username) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(["egypt", "isamilia"]);
+        }, 2000)
+    })
+}
+```
+
+## Settled Promises
+
+> ##### if you want to set promise that is already resolved . we use this case in testing
+> 
+
+```jsx
+const p = Promise.resolve({id:1,name:"ahmed eid"});
+p.then((result)=>console.log(result));
+```
+
+## Parallel Promises
+
+> #### if we want to return the result only if the multiple promises is executed correctly . we use `all(array)`
+> 
+
+```jsx
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve({ id: 1, name: "ahmed eid" });
+    }, 2000);
+})
+
+const p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve({ id: 2, name: "mohamed ahmed" });
+    },4000)
+})
+
+Promise.all([p1, p2])
+    .then(result => { console.log(result) }); // print the result after 4 second  
+```
+
+> #### if we want to return the result if one of the multiple promises is executed correctly . we use `race(array)`
+> 
+
+```jsx
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve({ id: 1, name: "ahmed eid" });
+    }, 2000);
+})
+
+const p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve({ id: 2, name: "mohamed ahmed" });
+    },4000)
+})
+
+Promise.race([p1, p2])
+    .then(result => { console.log(result) }); // print the result after 2 second  
+```
