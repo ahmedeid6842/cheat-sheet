@@ -1039,3 +1039,126 @@ async function createjwt(data){
 createjwt({name : "ahmed"});
 const decoded = jwt.verify(createjwt({name : "ahmed"}),"jwtsecret"); // return {name : "ahmed"}
 ```
+
+# Section 9 : Handling Logging Errors
+
+## try-catch
+
+> we can wrap our function with try-catch
+>
+
+```jsx
+router.get('/', async (req, res, next) => {
+try{
+    const customer = await Customer.find.sort('name');
+    return res.send(customer);
+}catch(err){
+		next(err); // pass the controll to the next middleware in pipeline with error obj
+}
+});
+```
+
+## Error Middleware
+
+> this middleware put after all your routes, means when we use `next()` it will end up here
+> 
+
+```jsx
+app.use(function(err,req,res,next){ 
+	// logging error message in server-side
+	return res.status(500).send("somthing went wrong");
+})
+
+// we can move error function to file and export it
+const error = require("./utils/error.js")
+app.use(error);
+```
+
+## Remove try-catch
+
+> it doesn’t make sense to wrap each route with try-catch.
+with use `asyncMiddleware` to handle try catch
+> 
+
+```jsx
+function asyncMiddleware(handler){
+	return async (req,res,next) =>{ // we return function because in route we pass the body of function that want to execute not calling it;
+		try{
+			await handler(req,res); // call the middleware that you to wrap with try-catch
+		}catch(err){
+					next(err) //if error pass the controll to the next middleware in request process pipline
+		}
+	}
+}
+
+router.get('/', asyncMiddleware(async (req, res, next) => {
+    const customer = await Customer.find().sort('name');
+    return res.send(customer);
+}));
+```
+
+## express-async-errors
+
+> express-async-errors : Is npm package that wrap express middleware functions with try-catch and if error pass the control to the next middleware.
+this package does the same as previoud section “remove try-catch”
+> 
+
+```jsx
+// in main file "index.js"
+require("express-async-errors");
+```
+
+## Logging Errors
+
+> winston is npm package that helps use to log our errors
+> 
+
+```jsx
+//create a file for set logger defination  winston "./utils/logger" 
+const winston = require("winston");
+module.exports = winston.createLogger({ // create logger object 
+    format: winston.format.json(), // format of our logs 
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        new winston.transports.File({ filename: "errors.log" }) // create a new transport to store logs in file name "errors.logs"
+    ]
+})
+
+//in error.js file which we pass the control if the error has occured
+const logger = require("../utils/logger");
+
+module.exports = function (err, req, res, next) {
+    logger.log({ // logging info we want logs in our file we specify 
+        level: "error",
+        message : err.message ,
+    })
+    return res.status(500).send("something failed");
+}
+ 
+```
+
+#### 🔥 transport : is storage device for our logs
+
+## Uncaught Exception
+
+> what if we have error that doesn’t have exception, it’s better to release an exception for uncaught exception
+> 
+
+> #### 🔥 `process.on("uncaughtException”,(exception)⇒{})` : process as an event object so it can to fire an event in case of “uncaughtException” was found
+
+```jsx
+//placed in index.js
+const logger = require("./utils/logger.js");
+
+process.on("uncaughtException", (ex) => {
+  logger.log({ // will log error in log file that you set with winston 
+    level: "error",
+    message: ex.message
+  });
+	process.exit(1);
+})
+ 
+throw new Error("error ocurred during the run");
+```
+
+> #### 🔥 it’s a better implementation if you hit uncaught Exception or un handled rejection to terminate you project
