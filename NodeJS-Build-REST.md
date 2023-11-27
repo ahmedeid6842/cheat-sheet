@@ -175,7 +175,7 @@ const schema = Joi.object({ // create joi schema object
 schema.validate(req.body); //validate req.body object using your schema 
 ```
 
-## PUT request
+## PUT Request
 
 > example : update course by it’s id ⬇️
 > 
@@ -244,7 +244,7 @@ app.use(morgan("tiny")); // "tiny" is way to print small log ,,, you can also st
 app.get("env"); // return NODE_ENV
 ```
 
-## configuration
+## Configuration
 
 
 > #### 🔥 config : is package that help us to set environment variable for configuration
@@ -270,9 +270,9 @@ app.get("env"); // return NODE_ENV
 
 # section 4 : Asynchronous Javacript
 
-## Asynchronous VS synchronous
+## Asynchronous VS Synchronous
 
-> #### 🔥 synchronous is executing the code line by line in blocking way blocking means block the thread until the current process is executed
+> #### 🔥 Synchronous is executing the code line by line in blocking way blocking means block the thread until the current process is executed
 
 
 > #### 🔥 Asynchronous is non-blocking executing means release the thread to execute another process and the back
@@ -453,4 +453,265 @@ const p2 = new Promise((resolve, reject) => {
 
 Promise.race([p1, p2])
     .then(result => { console.log(result) }); // print the result after 2 second  
+```
+
+# section 5 : CRUD operation using Mongodb
+
+#### 🔥 mongoose : is npm package that help us to work with mongodb
+
+## Connect To MongoDB Server
+
+> connect to mongodb using mongoose package through `connect()` function
+> 
+
+```jsx
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/dbName")
+					.then(()=>console.log("connected successfully"))
+					.catch((err)=>console.log(err.message));
+```
+
+## Schema
+
+> schema is to set the schema of your object of documents that will be stored in Database
+> 
+
+```jsx
+const mongoose= require("mongoose");
+
+const schema = new mongoose.Schema({
+	prop1 : String ,
+	prop2 : Number ,
+})
+```
+
+> ##### we have different data Type in mongodb schema
+> 
+
+![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/ae299061-0228-4504-9252-c6c15bd5e4c0)
+
+## Model
+
+> model is about to create class or collection in you DB based on schema you defined
+> 
+
+```jsx
+const mongoose= require("mongoose");
+
+const schema = new mongoose.Schema({
+	prop1 : String ,
+	prop2 : Number ,
+})
+
+const Course = mongoose.model("tableName",schema);
+```
+
+
+> we can define a new instance of model and save it
+> 
+
+```jsx
+const mongoose= require("mongoose");
+
+const schema = new mongoose.Schema({
+	prop1 : String ,
+	prop2 : Number ,
+})
+
+const Course = mongoose.model("tableName",schema);
+
+const course = new Course({ // creating a new instance of Course model
+			prop1: "value",
+			prop2 : 5 
+})
+
+await course.save(); // to save this course in db
+
+```
+
+## Query
+
+> `find()` :is query use to find document from DB .
+`sort({prop : 1})` : sort returned document based on prop  if prop:1 means ascending else prop:-1 then it's descending order >
+`select({prop1 : 1 , prop2 : 2})` : select specified prop from the returned document .
+> 
+
+```jsx
+function Query(){
+	const course = await Course.find({name:"value"})
+								.limit(10)
+								.sort({name:1}) // if name:1 means ascending else name:-1 then it's descending order
+								.select({name:1 , phone : 1}); // select specified prop from return docuemnt 
+}
+```
+
+> #### we can define a new instance of model and save it
+> 
+
+```jsx
+const mongoose= require("mongoose");
+
+const schema = new mongoose.Schema({
+	prop1 : String ,
+	prop2 : Number ,
+})
+
+const Course = mongoose.model("tableName",schema);
+
+const course = new Course({ // creating a new instance of Course model
+			prop1: "value",
+			prop2 : 5 
+})
+
+await course.save(); // to save this course in db
+
+```
+
+
+> #### 🔥 Schema : isn’t just important to insert the data but it’s very important to create if you will use query operator it tell query type of property that it’s search on
+
+
+## Query (comparison & logical) operator
+
+**1. comparison operator** 
+    `eq`: equal 
+    `ne`: not equal 
+    `gt`: greater than 
+    `gte`: greater than or equal 
+    `lt`: less than 
+    `lte`: less than or equal 
+    `in[value1,value2]` : prop in one of given values 
+    `nin[value1, value2]` : rever of in
+
+    ```jsx
+    async function Query(){
+        const course =await Course.find({price:{$gt : 10}}) //find a prices document where price is greater than 10 
+    }
+    ```
+
+
+
+**2. logical operator** 
+    `and([{},{}])` : (condition1 & condition2) are true 
+    `or([{},{}])` : (condition1 | condition2) are true
+
+    ```jsx
+    async function Query(){
+        const course = await Course.find()
+                                    .or([{price : 10},{isPublished:true}]) // price = 10 or ispublished=true
+    }
+    ```
+
+> `count()` : count the document and return them
+> 
+
+```jsx
+async function Query(){
+	const course = await Course.find()
+								.or([{price : 10},{isPublished:true}])
+								.count(); // this query will return the count of document that staticfy the condtion 
+}
+```
+
+## Pagination
+
+> #### return number of document in each page 
+#### `.skip((pageNumber -1)*pageSize).limit(pageSize);`
+> 
+
+```jsx
+async function Query(){
+	const course = await Course.find()
+							    .skip((pageNumber - 1)* pageSize)
+								.limit(pageSize);
+}
+```
+
+## Updating
+
+> #### `findOneAndUpdate({ prop1 : value},{$set:{ prop2:value , prop3 : value}})` : find document based on prop1 and update based on $set
+> 
+
+```jsx
+const mongoose = require("mongoose");
+
+mongoose
+    .connect("mongodb://localhost/mongo-exercises")
+    .then(() => console.log("connected successfully to database"))
+    .catch((err) => console.log(err.message));
+
+const Course = mongoose.model("course", new mongoose.Schema({
+    name: String,
+    isPublished: Boolean,
+    price: Number,
+    tags: [String]
+}));
+
+async function exercise(id) {
+    const course = await Course.findOneAndUpdate({ name: "Express.js Course" }, {
+        $set: {
+            price : 50
+        }
+    }, { new: true });
+    console.log(course);
+
+}
+
+exercise("5a68fde3f09ad7646ddec17e");
+```
+
+## Exercise 1
+
+![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/704cc939-4fb3-4169-8d3c-155208123714)
+
+```jsx
+const mongoose = require("mongoose");
+
+mongoose
+    .connect("mongodb://localhost/mongo-exercises")
+    .then(() => console.log("connected successfully to database"))
+    .catch((err) => console.log(err.message));
+
+const Course = mongoose.model("course", new mongoose.Schema({
+    name: String,
+    isPublished: Boolean,
+    tags: [String]
+}));
+
+async function exercise() {
+    const course = await Course.find({ isPublished: true, tags: "backend" })
+        .sort({ name: 1 });
+    console.log(course);
+}
+
+exercise();
+```
+
+## Exercise 2
+
+![Untitled](https://github.com/ahmedeid6842/cheat-sheet/assets/57197702/44185f3d-11d7-45fa-98e0-89fdc285bf65)
+
+```jsx
+const mongoose = require("mongoose");
+
+mongoose
+    .connect("mongodb://localhost/mongo-exercises")
+    .then(() => console.log("connected successfully to database"))
+    .catch((err) => console.log(err.message));
+
+const Course = mongoose.model("course", new mongoose.Schema({
+    name: String,
+    isPublished: Boolean,
+    tags: [String]
+}));
+
+async function exercise() {
+    const course = await Course.find({ isPublished: true, tags: { $in: ["backend", "frontend"] } })
+        .sort({ price: -1 })
+        .select({ name: 1, author: 1 });
+    console.log(course);
+}
+
+exercise();
 ```
