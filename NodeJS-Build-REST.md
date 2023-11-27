@@ -715,3 +715,72 @@ async function exercise() {
 
 exercise();
 ```
+
+# Section 8 : Mongoose Data validation
+
+> #### We can make field required based on the existence of another field
+> 
+
+```jsx
+const schema = new mongoose.Schema({
+	name : {
+		type : String 
+	},
+	isPublished : {
+		type : Number, 
+		required : function(){return this.name}
+	}
+})
+```
+
+> #### In string Data Type we can set minimum length and maximum length of field
+> 
+
+```jsx
+const schema = new mongoose.Schema({
+	name : {
+		type : String ,
+		minlength : 5,   //minimum length of name field is 5 and maximum is 255
+		maxlength : 255
+	}
+})
+```
+
+> #### We can defined specific values and our field must be one of those values
+> 
+
+```jsx
+const schema = new mongoose.Schema({
+	name:{
+		type : String , 
+		enum : ["ahmed","mohamed","hassan"] // our name field should be one of those values in array
+	}
+})
+```
+
+> #### We can trim “remove padding our extra spaces from front and the end of string” .
+we can make mongoose automatically convert our field to lowercase or uppercase
+> 
+
+```jsx
+const schema = new mongoose.Schema({
+	name:{
+		type : String,
+		trim : true , 
+		lowerCase : true // will convert our string to lowercase even we insert it as upper case 
+	}
+})
+```
+
+> #### we can define setter and getter that specify how to get and set value of property
+> 
+
+```jsx
+const schema = new mongoose.Schema({
+	phone : {
+		type : Number , 
+		get : (value) => Math.round(value),
+		set : (value) => Math.round(value)
+	}
+})
+```
