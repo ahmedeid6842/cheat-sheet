@@ -716,7 +716,7 @@ async function exercise() {
 exercise();
 ```
 
-# Section 8 : Mongoose Data validation
+# Section 6 : Mongoose Data validation
 
 > #### We can make field required based on the existence of another field
 > 
@@ -783,4 +783,102 @@ const schema = new mongoose.Schema({
 		set : (value) => Math.round(value)
 	}
 })
+```
+
+# Section 7 : Modeling Relationship
+
+#### 🔥 we have two types of relationship in mongodb : 
+  1. using references “Normalization” : `course {author:{_id:”123213687687”}}`
+  2. using embedded “denormalization” : `course {author:{name:”ahmed”, age:25}}`
+
+
+#### 🔥 references and embedded using are trad-off between performance and consistency .
+> means in reference modeling if author name has change it’s automatically changed in all documents that reference author document, but it’s very heavy process to move from one collection to another . **consistence > performance** 
+but in embedded modeling if author name has changed so you have to change it manually in all document that embed that document, but it’s easy to get author because it’s in the same collection . **performance > consistence**
+>
+
+## Define embedded and reference modeling
+
+```jsx
+//define embedded 
+const mongoose = require("mongoose");
+const AuthorSchema = new mongoose.Schema({
+    name: String,
+    bio: String,
+    websit: String
+})
+const Author = mongoose.model("Author", AuthorSchema);
+
+const Course = mongoose.model("course", new mongoose.Schema({
+    name: String,
+    author: {
+        type: AuthorSchema, // we embedd author document 
+        required: true
+    }
+}))
+
+//define reference 
+const AuthorSchema = new mongoose.Schema({
+    name: String,
+    bio: String,
+    websit: String
+})
+const Author = mongoose.model("Author", AuthorSchema);
+
+const Course = mongoose.model("course", new mongoose.Schema({
+    name: String,
+    author: {
+        type: mongoose.Schema.Types.ObjectId, // we refernce the author document 
+        ref: "Author"  // set in which collection that document is
+    }
+}))
+
+```
+
+## Population
+
+> population is used with reference modeling .
+in case if we want to get actual document which we refer .
+> 
+
+```jsx
+const courses = await Course.find()
+							.populate("author","name -_id"); // means get the actual document which we refer with author property, "name -_id" if you want to select specific props
+```
+
+## Update embedding document
+
+```jsx
+async function updateEmbed(){
+	const course = await Course.find({name:"firstCourse"});
+	course.author.name = "new author name";
+	await course.save();
+}
+
+//another technique 
+async function updateEmbed(){
+	const course = await Course.update({name:"firstCourse"},{
+			$set:{
+				"author.name" : "new author name"
+			}
+	})
+}
+```
+
+## Transaction fawn
+
+> transaction means that if have two process and both of them should be executed
+> 
+
+> fawn : is npm package that help us to do transaction
+> 
+
+```jsx
+const Fawn = require("fawn");
+Fawn.init(mongoose)
+async function doSomeThing(){
+ new Fawn.task()
+					.save("collectionName",object to store)
+					.update("collectionName",{_id:movie.id},{$inc:{numberInStock : -1}}); // those two processes "save and update" both of them will execute and if one fail the anoterh is fail too 
+}
 ```
