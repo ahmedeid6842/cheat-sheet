@@ -197,3 +197,29 @@ console.log('finished execution');
 
 > #### 🔥 in example above : if we click it will be placed inside event queue until wait three second finished
 >
+
+### Coercion
+
+> #### 👀 is about JS engine try to understand and find appropriate variables
+#### 🔥 in code below we add number with string so JS coercion try to find suitable data type to complete the add operation
+>
+
+### Comparison Operator
+
+```jsx
+console.log(3<2<1); // this will print true 
+/*
+3<2 = > false
+console.log(false<1);
+console.log(true);
+*/
+```
+
+> 🔥 in code above it print true because < operator goes from left to right,
+so it will compare `3<2` and return the value of it which is `false`  then compare the rest of comparison `false<1` the result is true because false is equal 0 and 0 is less than 1
+>
+
+> 🔥 Number(undefined) : NAN
+Number(null) : 0
+Number(false) : 0
+>
